@@ -219,7 +219,7 @@ export default function HomePage() {
           </Link>
 
           {/* 2. Speech Analysis */}
-          <Link href="/speech-analysis" className="p-6 bg-white shadow-md rounded-xl hover:shadow-lg transition cursor-pointer">
+          <Link href="/analysis" className="p-6 bg-white shadow-md rounded-xl hover:shadow-lg transition cursor-pointer">
             <h2 className="text-xl font-semibold text-blue-600 mb-2">Speech & Tone Analysis</h2>
             <p className="text-gray-800 text-sm">
               Analyze clarity, tone, speed, filler words, and fluency.
