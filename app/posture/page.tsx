@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { analyzePostureCues } from "@/lib/postureAnalysis";
 import { generateFeedback } from "@/lib/feedbackEngine";
-import { generateAiFeedback } from "@/lib/actions";
+import { generateAiFeedback, saveAnalysisResult } from "@/lib/actions";
 
 export default function PostureAnalysisPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -44,6 +44,13 @@ export default function PostureAnalysisPage() {
         const feedbackData = {
           ...result,
         };
+        
+        localStorage.setItem("latestPostureData", JSON.stringify(feedbackData));
+
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+          await saveAnalysisResult(userId, 'posture', feedbackData);
+        }
         
         // Try to get AI feedback first
         const aiResult = await generateAiFeedback(feedbackData, "posture");

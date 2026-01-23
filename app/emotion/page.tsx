@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { analyzeFacialCues } from "@/lib/facialAnalysis";
 import { generateFeedback } from "@/lib/feedbackEngine";
-import { generateAiFeedback } from "@/lib/actions";
+import { generateAiFeedback, saveAnalysisResult } from "@/lib/actions";
 
 export default function EmotionAnalysisPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -50,6 +50,13 @@ export default function EmotionAnalysisPage() {
         const feedbackData = {
           ...result,
         };
+        
+        localStorage.setItem("latestEmotionData", JSON.stringify(feedbackData));
+
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+          await saveAnalysisResult(userId, 'emotion', feedbackData);
+        }
         
         // Try to get AI feedback first
         const aiResult = await generateAiFeedback(feedbackData, "emotion");

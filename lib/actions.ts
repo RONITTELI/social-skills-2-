@@ -1,6 +1,9 @@
 'use server';
 
-export async function generateAiFeedback(data: any, type: "speech" | "emotion" | "posture" = "speech") {
+import dbConnect from '@/lib/mongodb';
+import Analysis from '@/models/Analysis'
+
+export async function generateAiFeedback(data: any, type: "speech" | "emotion" | "posture" | "comprehensive" = "speech") {
   const apiKey = process.env.GROQ_API_KEY;
   
   if (!apiKey) {
@@ -10,7 +13,18 @@ export async function generateAiFeedback(data: any, type: "speech" | "emotion" |
 
   let systemPrompt = "";
   
-  if (type === "posture") {
+  if (type === "comprehensive") {
+    systemPrompt = `You are a world-class communication coach. Analyze the user's combined performance data from Speech, Facial Emotion, and Posture analysis.
+    
+    Output strictly valid JSON with this schema:
+    {
+      "summary": "string (2-3 sentences summary of performance)",
+      "strengths": ["string", "string", "string"],
+      "improvements": ["string", "string", "string"],
+      "overallScore": number (0-100)
+    }
+    Keep the tone professional, constructive, and encouraging.`;
+  } else if (type === "posture") {
     systemPrompt = `You are an expert body language coach. Analyze the user's posture data (score, issues like head tilt or uneven shoulders) and provide feedback on their physical presence.
     
     Output strictly valid JSON with this schema:
@@ -67,10 +81,30 @@ export async function generateAiFeedback(data: any, type: "speech" | "emotion" |
 
     const json = await response.json();
     const content = json.choices[0]?.message?.content;
-    if (content) return JSON.parse(content);
+    if (content) {
+      // Clean up potential markdown code blocks before parsing
+      const cleaned = content.replace(/^```json\s*/, "").replace(/^```\s*/, "").replace(/\s*```$/, "");
+      return JSON.parse(cleaned);
+    }
     return null;
   } catch (error) {
     console.error("AI Feedback Error:", error);
     return null;
+  }
+}
+
+export async function saveAnalysisResult(userId: string, type: string, data: any) {
+  try {
+    await dbConnect();
+    const analysis = new Analysis({
+      userId: userId || 'anonymous',
+      type,
+      data,
+    });
+    await analysis.save();
+    return { success: true };
+  } catch (error) {
+    console.error("Error saving analysis:", error);
+    return { success: false, error: "Failed to save analysis" };
   }
 }

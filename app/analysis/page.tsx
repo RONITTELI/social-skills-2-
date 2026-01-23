@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { analyzeSpeech } from "../../lib/speechAnalysis";
 import { generateFeedback } from "../../lib/feedbackEngine";
+import { saveAnalysisResult } from "@/lib/actions";
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -63,6 +64,12 @@ export default function AnalysisPage() {
         dominantEmotion: "neutral", // Placeholder for emotion (Module 3)
         eyeContact: "good", // Placeholder for eye contact (Module 3)
       };
+
+      localStorage.setItem("latestSpeechData", JSON.stringify(feedbackData));
+      
+      if (userId) {
+        await saveAnalysisResult(userId, 'speech', feedbackData);
+      }
 
       const generated = generateFeedback(feedbackData);
       setFeedback(generated);
