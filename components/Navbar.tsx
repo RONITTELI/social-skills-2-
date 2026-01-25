@@ -27,6 +27,9 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-3">
+          <Link href="/" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Home</Link>
+          <Link href="/dashboard" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Dashboard</Link>
+          <Link href="/analysis" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Analysis</Link>
           {!loggedIn && (
             <>
               <Link

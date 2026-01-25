@@ -1,35 +1,59 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
+  const [debug, setDebug] = useState({ raw: null, error: null });
+
 
   useEffect(() => {
-    // Load real data from local storage if available, otherwise use defaults
-    const speech = JSON.parse(localStorage.getItem("latestSpeechData") || "{}");
-    const emotion = JSON.parse(localStorage.getItem("latestEmotionData") || "{}");
-    const posture = JSON.parse(localStorage.getItem("latestPostureData") || "{}");
-
-    setData({
-      speech: {
-        wpm: speech.wpm || 0,
-        fillerWords: speech.fillerWords || 0,
-        tone: speech.tone || "N/A"
-      },
-      emotion: {
-        dominant: emotion.dominantEmotion || "N/A",
-        eyeContact: emotion.eyeContact || "N/A"
-      },
-      posture: {
-        score: posture.postureScore || 0,
-        issues: posture.postureIssues?.length || 0
+    const userId = "69760c17f8229f9744b8039e";
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/analysis?userId=${userId}`);
+        const result = await res.json();
+        setDebug({ raw: result, error: null });
+        if (result.success && result.data) {
+          setData({
+            speech: {
+              wpm: result.data.speech?.wpm || 0,
+              fillerWords: result.data.speech?.fillerWords || 0,
+              tone: result.data.speech?.tone || "N/A"
+            },
+            emotion: {
+              dominant: result.data.emotion?.dominantEmotion || "N/A",
+              eyeContact: result.data.emotion?.eyeContact || "N/A"
+            },
+            posture: {
+              score: result.data.posture?.postureScore || 0,
+              issues: Array.isArray(result.data.posture?.postureIssues) ? result.data.posture.postureIssues.length : 0
+            }
+          });
+        } else {
+          setData(null);
+        }
+      } catch (e) {
+        setDebug({ raw: null, error: e.message });
+        setData(null);
       }
-    });
+    };
+    fetchData();
   }, []);
 
-  if (!data) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (!data) return (
+    <div className="min-h-screen flex flex-col items-center justify-center">
+      <div>Loading...</div>
+      {debug.raw && (
+        <pre className="mt-4 bg-gray-100 p-2 rounded text-xs max-w-2xl overflow-x-auto">{JSON.stringify(debug.raw, null, 2)}</pre>
+      )}
+      {debug.error && (
+        <div className="mt-4 text-red-600">Error: {debug.error}</div>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen py-12 px-6 bg-gradient-to-b from-gray-50 to-white">
