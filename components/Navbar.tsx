@@ -19,28 +19,36 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 shadow-lg">
-      <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-white text-blue-600 font-bold shadow-md">SS</span>
-          <span className="text-lg sm:text-xl font-extrabold text-white">SocialSkill AI</span>
+    <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-700/50 shadow-lg">
+      <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-lg">AI</span>
+          </div>
+          <span className="text-lg sm:text-xl font-bold text-slate-100">SocialSkill AI</span>
         </Link>
 
-        <nav className="flex items-center gap-3">
-          <Link href="/" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Home</Link>
-          <Link href="/dashboard" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Dashboard</Link>
-          <Link href="/analysis" className="px-3 py-2 rounded-lg text-white hover:bg-white/10 transition font-semibold">Analysis</Link>
+        <nav className="flex items-center gap-2 sm:gap-3">
+          <Link href="/" className="px-3 py-2 rounded-lg text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 transition font-medium text-sm sm:text-base">
+            Home
+          </Link>
+          <Link href="/dashboard" className="px-3 py-2 rounded-lg text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 transition font-medium text-sm sm:text-base">
+            Dashboard
+          </Link>
+          <Link href="/analysis" className="px-3 py-2 rounded-lg text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 transition font-medium text-sm sm:text-base">
+            Analysis
+          </Link>
           {!loggedIn && (
             <>
               <Link
                 href="/login"
-                className="px-4 py-2 rounded-lg bg-white text-blue-600 hover:bg-gray-100 transition shadow-md font-semibold"
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition shadow-md font-semibold text-sm sm:text-base"
               >
                 Login
               </Link>
               <Link
                 href="/signup"
-                className="px-4 py-2 rounded-lg border-2 border-white text-white hover:bg-white/20 transition font-semibold"
+                className="px-4 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800/60 transition font-semibold text-sm sm:text-base"
               >
                 Sign Up
               </Link>
@@ -51,7 +59,7 @@ export default function Navbar() {
             <>
               <Link
                 href="/account"
-                className="w-10 h-10 rounded-full bg-white text-blue-600 flex items-center justify-center font-bold hover:bg-gray-100 shadow-md transition"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center font-bold hover:shadow-lg transition shadow-md"
                 title={email}
               >
                 {email.charAt(0).toUpperCase()}
@@ -62,7 +70,7 @@ export default function Navbar() {
                   localStorage.removeItem("email");
                   window.location.href = "/login";
                 }}
-                className="px-4 py-2 rounded-lg bg-white text-red-600 hover:bg-gray-100 transition shadow-md font-semibold"
+                className="px-4 py-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/30 transition font-semibold text-sm sm:text-base"
               >
                 Logout
               </button>

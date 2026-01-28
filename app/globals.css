@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --primary: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 @theme inline {
@@ -12,16 +18,39 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: transparent;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  @apply text-gray-800;
+  @apply text-slate-100;
+  min-height: 100vh;
+}
+
+/* Modern glassmorphism effect */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Professional card styling */
+.card {
+  @apply bg-slate-800/60 backdrop-blur border border-slate-700/50 rounded-lg transition-all duration-300;
+}
+
+.card:hover {
+  @apply bg-slate-800/80 border-slate-600/50 shadow-lg;
+}
+
+/* Button utilities */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl;
+}
+
+.btn-secondary {
+  @apply bg-slate-700 hover:bg-slate-600 text-slate-100 rounded-lg font-semibold transition-all duration-200;
+}
+
+.btn-ghost {
+  @apply text-slate-300 hover:text-slate-100 hover:bg-slate-700/50 rounded-lg font-semibold transition-all duration-200;
 }
