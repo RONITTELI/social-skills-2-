@@ -52,7 +52,7 @@ export default function ComprehensiveFeedbackPage() {
   }, []);
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen py-12 px-6 bg-linear-to-b from-indigo-50 to-white">
       <div className="max-w-5xl mx-auto">
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-4">

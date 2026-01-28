@@ -22,7 +22,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-700/50 shadow-lg">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
+          <div className="h-10 w-10 rounded-lg bg-linear-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-lg">AI</span>
           </div>
           <span className="text-lg sm:text-xl font-bold text-slate-100">SocialSkill AI</span>
@@ -59,7 +59,7 @@ export default function Navbar() {
             <>
               <Link
                 href="/account"
-                className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center font-bold hover:shadow-lg transition shadow-md"
+                className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center font-bold hover:shadow-lg transition shadow-md"
                 title={email}
               >
                 {email.charAt(0).toUpperCase()}

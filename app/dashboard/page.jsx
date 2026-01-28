@@ -1,8 +1,9 @@
 "use client";
 
-
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import ExpandableText from "./ExpandableText";
+
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
@@ -18,19 +19,9 @@ export default function DashboardPage() {
         setDebug({ raw: result, error: null });
         if (result.success && result.data) {
           setData({
-            speech: {
-              wpm: result.data.speech?.wpm || 0,
-              fillerWords: result.data.speech?.fillerWords || 0,
-              tone: result.data.speech?.tone || "N/A"
-            },
-            emotion: {
-              dominant: result.data.emotion?.dominantEmotion || "N/A",
-              eyeContact: result.data.emotion?.eyeContact || "N/A"
-            },
-            posture: {
-              score: result.data.posture?.postureScore || 0,
-              issues: Array.isArray(result.data.posture?.postureIssues) ? result.data.posture.postureIssues.length : 0
-            }
+            speech: result.data.speech || [],
+            emotion: result.data.emotion || [],
+            posture: result.data.posture || []
           });
         } else {
           setData(null);
@@ -56,7 +47,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen py-12 px-6 bg-linear-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-end mb-10">
           <div>
@@ -75,9 +66,9 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Stats Grid */}
+        {/* Latest Metrics Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {/* Speech Card */}
+          {/* Latest Speech Card */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-purple-100 rounded-lg text-purple-600">
@@ -85,14 +76,32 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-bold text-gray-800 text-lg">Speech</h3>
             </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center"><span className="text-gray-500">Pace</span> <span className="font-bold text-gray-900">{data.speech.wpm} WPM</span></div>
-              <div className="flex justify-between items-center"><span className="text-gray-500">Fillers</span> <span className="font-bold text-gray-900">{data.speech.fillerWords}</span></div>
-              <div className="flex justify-between items-center"><span className="text-gray-500">Tone</span> <span className="font-bold text-gray-900 capitalize">{data.speech.tone}</span></div>
-            </div>
+            {Array.isArray(data.speech) && data.speech.length > 0 ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center"><span className="text-gray-500">Pace</span> <span className="font-bold text-gray-900">{data.speech[0].data?.wpm ?? '-' } WPM</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-500">Fillers</span> <span className="font-bold text-gray-900">{data.speech[0].data?.fillerWords ?? '-'}</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-500">Tone</span> <span className="font-bold text-gray-900 capitalize">{data.speech[0].data?.tone ?? '-'}</span></div>
+                {data.speech[0].data?.transcript && (
+                  <div className="mt-4">
+                    <span className="text-gray-500">Transcript:</span>
+                    <ExpandableText text={data.speech[0].data.transcript} maxLength={40} />
+                  </div>
+                )}
+                {data.speech[0].data?.issues && data.speech[0].data.issues.length > 0 && (
+                  <div className="mt-4">
+                    <span className="text-gray-500">Detected Issues:</span>
+                    <ul className="list-disc ml-6 text-xs text-red-600">
+                      {data.speech[0].data.issues.map((issue, idx) => (
+                        <li key={idx}>{issue || 'N/A'}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : <div className="text-gray-400">No speech data.</div>}
           </div>
 
-          {/* Emotion Card */}
+          {/* Latest Emotion Card */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-pink-100 rounded-lg text-pink-600">
@@ -100,13 +109,15 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-bold text-gray-800 text-lg">Emotion</h3>
             </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center"><span className="text-gray-500">Dominant</span> <span className="font-bold text-gray-900 capitalize">{data.emotion.dominant}</span></div>
-              <div className="flex justify-between items-center"><span className="text-gray-500">Eye Contact</span> <span className="font-bold text-gray-900 capitalize">{data.emotion.eyeContact}</span></div>
-            </div>
+            {Array.isArray(data.emotion) && data.emotion.length > 0 ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center"><span className="text-gray-500">Dominant</span> <span className="font-bold text-gray-900 capitalize">{data.emotion[0].data?.dominantEmotion ?? '-'}</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-500">Eye Contact</span> <span className="font-bold text-gray-900 capitalize">{data.emotion[0].data?.eyeContact ?? '-'}</span></div>
+              </div>
+            ) : <div className="text-gray-400">No emotion data.</div>}
           </div>
 
-          {/* Posture Card */}
+          {/* Latest Posture Card */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-blue-100 rounded-lg text-blue-600">
@@ -114,10 +125,115 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-bold text-gray-800 text-lg">Posture</h3>
             </div>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center"><span className="text-gray-500">Score</span> <span className="font-bold text-gray-900">{data.posture.score}/100</span></div>
-              <div className="flex justify-between items-center"><span className="text-gray-500">Issues</span> <span className="font-bold text-gray-900">{data.posture.issues} Detected</span></div>
-            </div>
+            {Array.isArray(data.posture) && data.posture.length > 0 ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center"><span className="text-gray-500">Score</span> <span className="font-bold text-gray-900">{data.posture[0].data?.postureScore ?? '-'}/100</span></div>
+                <div className="flex justify-between items-center"><span className="text-gray-500">Issues</span> <span className="font-bold text-gray-900">{data.posture[0].data?.postureIssues?.length ?? 0} Detected</span></div>
+                {data.posture[0].data?.postureIssues && data.posture[0].data.postureIssues.length > 0 && (
+                  <div className="mt-4">
+                    <span className="text-gray-500">Details:</span>
+                    <ul className="list-disc ml-6 text-xs text-blue-600">
+                      {data.posture[0].data.postureIssues.map((issue, idx) => (
+                        <li key={idx}>{issue}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : <div className="text-gray-400">No posture data.</div>}
+          </div>
+        </div>
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold mb-4">Speech History</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border rounded text-gray-900">
+              <thead>
+                <tr>
+                  <th className="px-3 py-2 border">Date</th>
+                  <th className="px-3 py-2 border">WPM</th>
+                  <th className="px-3 py-2 border">Fillers</th>
+                  <th className="px-3 py-2 border">Tone</th>
+                  <th className="px-3 py-2 border">Transcript</th>
+                  <th className="px-3 py-2 border">Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(data.speech) && data.speech.length > 0) ? data.speech.map((item, idx) => (
+                  <tr key={idx} className="text-xs text-gray-900 cursor-pointer hover:bg-gray-100" onClick={() => alert('Detail view coming soon!')}>
+                    <td className="px-3 py-2 border">{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.wpm ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.fillerWords ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.tone ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border max-w-xs truncate" title={item.data?.transcript}>{item.data?.transcript?.slice(0, 40) ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border">
+                      {item.data?.issues && item.data.issues.length > 0 ? (
+                        <ul className="list-disc ml-4">
+                          {item.data.issues.map((issue, i) => <li key={i}>{issue || 'N/A'}</li>)}
+                        </ul>
+                      ) : 'None'}
+                    </td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan={6} className="text-center text-gray-400 py-4">No speech history available.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold mb-4">Emotion History</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border rounded">
+              <thead>
+                <tr>
+                  <th className="px-3 py-2 border text-gray-900">Date</th>
+                  <th className="px-3 py-2 border text-gray-900">Dominant</th>
+                  <th className="px-3 py-2 border text-gray-900">Eye Contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(data.emotion) && data.emotion.length > 0) ? data.emotion.map((item, idx) => (
+                  <tr key={idx} className="text-xs text-gray-900 cursor-pointer hover:bg-gray-100" onClick={() => alert('Detail view coming soon!')}>
+                    <td className="px-3 py-2 border">{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.dominantEmotion ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.eyeContact ?? 'N/A'}</td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan={3} className="text-center text-gray-400 py-4">No emotion history available.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold mb-4">Posture History</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border rounded">
+              <thead>
+                <tr>
+                  <th className="px-3 py-2 border text-gray-900">Date</th>
+                  <th className="px-3 py-2 border text-gray-900">Score</th>
+                  <th className="px-3 py-2 border text-gray-900">Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(Array.isArray(data.posture) && data.posture.length > 0) ? data.posture.map((item, idx) => (
+                  <tr key={idx} className="text-xs text-gray-900 cursor-pointer hover:bg-gray-100" onClick={() => alert('Detail view coming soon!')}>
+                    <td className="px-3 py-2 border">{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
+                    <td className="px-3 py-2 border">{item.data?.postureScore ?? 'N/A'}</td>
+                    <td className="px-3 py-2 border">
+                      {item.data?.postureIssues && item.data.postureIssues.length > 0 ? (
+                        <ul className="list-disc ml-4">
+                          {item.data.postureIssues.map((issue, i) => <li key={i}>{issue || 'N/A'}</li>)}
+                        </ul>
+                      ) : 'None'}
+                    </td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan={3} className="text-center text-gray-400 py-4">No posture history available.</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
