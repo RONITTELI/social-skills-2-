@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import ExpandableText from "./ExpandableText";
+
+import dynamic from "next/dynamic";
+const PostureEmotionDemo = dynamic(() => import("../../components/PostureEmotionDemo"), { ssr: false });
 
 
 export default function DashboardPage() {
@@ -47,14 +49,14 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-linear-to-b from-gray-50 to-white">
+    <div className="min-h-screen py-12 px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
-              Performance <span className="text-blue-600">Dashboard</span>
+            <h1 className="text-4xl font-extrabold text-slate-100 mb-2">
+              Performance <span className="text-blue-400">Dashboard</span>
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-slate-300">
               Overview of your latest communication metrics.
             </p>
           </div>
@@ -64,6 +66,9 @@ export default function DashboardPage() {
           >
             Get Comprehensive Feedback
           </Link>
+        </div>
+        <div className="mb-10">
+          <PostureEmotionDemo />
         </div>
 
         {/* Latest Metrics Summary Cards */}
