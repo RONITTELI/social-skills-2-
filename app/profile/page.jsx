@@ -53,23 +53,22 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen py-16 px-6">
+    <div className="min-h-screen py-16 px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-4">
             Complete Your Profile
           </h1>
-          <p className="text-gray-700 text-lg">Help us personalize your learning experience</p>
+          <p className="text-slate-300 text-lg">Help us personalize your learning experience</p>
         </div>
-        
-        <div className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border-2 border-white/50">
+        <div className="bg-slate-800/60 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border-2 border-slate-700/50">
           <div className="space-y-6">
 
         {/* Name */}
         <label className="block font-semibold mb-1">Full Name</label>
         <input
           type="text"
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100 placeholder-slate-400"
           onChange={(e) => setProfile({ ...profile, name: e.target.value })}
         />
 
@@ -79,7 +78,7 @@ export default function ProfilePage() {
             <label className="block font-semibold mb-1">Age</label>
             <input
               type="number"
-              className="w-full p-3 border rounded mb-4"
+              className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100 placeholder-slate-400"
               onChange={(e) => setProfile({ ...profile, age: e.target.value })}
             />
           </div>
@@ -88,7 +87,7 @@ export default function ProfilePage() {
             <label className="block font-semibold mb-1">Height (in cm)</label>
             <input
               type="number"
-              className="w-full p-3 border rounded mb-4"
+              className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100 placeholder-slate-400"
               onChange={(e) => setProfile({ ...profile, height: e.target.value })}
             />
           </div>
@@ -98,14 +97,14 @@ export default function ProfilePage() {
         <label className="block font-semibold mb-1">Education / Profession</label>
         <input
           type="text"
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100 placeholder-slate-400"
           onChange={(e) => setProfile({ ...profile, education: e.target.value })}
         />
 
         {/* Personality */}
         <label className="block font-semibold mb-1">Personality Type</label>
         <select
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100"
           onChange={(e) => setProfile({ ...profile, personality: e.target.value })}
         >
           <option value="">Select</option>
@@ -122,14 +121,14 @@ export default function ProfilePage() {
           type="number"
           min="1"
           max="10"
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100 placeholder-slate-400"
           onChange={(e) => setProfile({ ...profile, confidence: e.target.value })}
         />
 
         {/* English Level */}
         <label className="block font-semibold mb-1">English Speaking Level</label>
         <select
-          className="w-full p-3 border rounded mb-4"
+          className="w-full p-3 border rounded mb-4 bg-slate-900 text-slate-100"
           onChange={(e) => setProfile({ ...profile, englishLevel: e.target.value })}
         >
           <option value="">Select</option>
@@ -148,7 +147,7 @@ export default function ProfilePage() {
               className={`px-4 py-2 rounded-full border ${
                 profile.interests.includes(interest)
                   ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700"
+                  : "bg-slate-900 text-slate-100 border-slate-700"
               }`}
               onClick={() => toggleInterest(interest)}
             >
@@ -160,7 +159,7 @@ export default function ProfilePage() {
         {/* Goal */}
         <label className="block font-semibold mb-1">Your Goal</label>
         <select
-          className="w-full p-3 border rounded mb-6"
+          className="w-full p-3 border rounded mb-6 bg-slate-900 text-slate-100"
           onChange={(e) => setProfile({ ...profile, goal: e.target.value })}
         >
           <option value="">Select</option>

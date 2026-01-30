@@ -27,35 +27,35 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-72px)] flex items-center justify-center bg-gradient-to-b from-blue-50 to-white">
-      <div className="bg-white/90 backdrop-blur p-8 shadow-xl rounded-2xl w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900">Create your account</h1>
-        <p className="text-gray-600 mb-6">Join SocialSkill AI to start practicing</p>
+    <div className="min-h-[calc(100vh-72px)] flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="bg-slate-800/80 backdrop-blur p-8 shadow-xl rounded-2xl w-full max-w-md border border-slate-700/50">
+        <h1 className="text-3xl font-bold mb-2 text-slate-100">Create your account</h1>
+        <p className="text-slate-300 mb-6">Join SocialSkill AI to start practicing</p>
 
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Email</label>
         <input
           type="email"
           placeholder="you@example.com"
-          className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-800 text-slate-100 placeholder-slate-400"
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Password</label>
         <input
           type="password"
           placeholder="••••••••"
-          className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-blue-600 focus:outline-none bg-slate-800 text-slate-100 placeholder-slate-400"
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           onClick={handleSignup}
-          className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+          className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-3 rounded-lg hover:from-blue-700 hover:to-cyan-700 font-semibold shadow-lg hover:shadow-xl transition"
         >
           Sign Up
         </button>
 
-        <p className="text-sm text-gray-600 mt-4">Already have an account? <a href="/login" className="text-blue-600 hover:underline">Log in</a></p>
+        <p className="text-sm text-slate-400 mt-4">Already have an account? <a href="/login" className="text-cyan-400 hover:underline">Log in</a></p>
       </div>
     </div>
   );

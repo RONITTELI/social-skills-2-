@@ -107,9 +107,18 @@ export default function AnalysisPage() {
 
       localStorage.setItem("latestSpeechData", JSON.stringify(feedbackData));
       
-      // Only save if we have speech analysis
-      if (userId && speechAnalysis) {
-        await saveAnalysisResult(userId, 'speech', feedbackData);
+
+      // Save all analysis types if present and userId exists
+      if (userId) {
+        if (speechAnalysis) {
+          await saveAnalysisResult(userId, 'speech', feedbackData);
+        }
+        if (emotionData) {
+          await saveAnalysisResult(userId, 'emotion', emotionData);
+        }
+        if (postureData) {
+          await saveAnalysisResult(userId, 'posture', postureData);
+        }
       }
 
       // Generate rule-based feedback
