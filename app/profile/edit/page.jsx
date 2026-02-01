@@ -1,18 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function EditProfile() {
+  const router = useRouter();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const uid = localStorage.getItem("userId");
-    if (!uid) window.location.href = "/login";
+    if (!uid) {
+      router.push("/login");
+      return;
+    }
 
     fetch(`/api/profile/${uid}`)
       .then((res) => res.json())
-      .then((data) => setProfile(data.profile));
-  }, []);
+      .then((data) => setProfile(data.profile))
+      .catch((err) => {
+        console.error("Error loading profile:", err);
+        router.push("/profile");
+      });
+  }, [router]);
 
   async function handleUpdate() {
     const res = await fetch("/api/profile/update", {

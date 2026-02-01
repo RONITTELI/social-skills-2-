@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AccountPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,10 @@ export default function AccountPage() {
     const uid = localStorage.getItem("userId");
     const storedEmail = localStorage.getItem("email");
 
-    if (!uid) window.location.href = "/login";
+    if (!uid) {
+      router.push("/login");
+      return;
+    }
 
     setEmail(storedEmail);
 
@@ -20,8 +25,12 @@ export default function AccountPage() {
       .then((data) => {
         setProfile(data.profile);
         setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading profile:", err);
+        setLoading(false);
       });
-  }, []);
+  }, [router]);
 
   if (loading) return <p className="p-10">Loading...</p>;
 

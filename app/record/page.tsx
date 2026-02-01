@@ -7,7 +7,7 @@ export default function RecordPage() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const [promptData, setPromptData] = useState<{ title: string; prompt: string } | null>(null);
@@ -18,6 +18,13 @@ export default function RecordPage() {
   const [transcript, setTranscript] = useState("");
 
   useEffect(() => {
+    // Check authorization
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
     const saved = localStorage.getItem("scenario");
     const analyses = localStorage.getItem("selectedAnalyses");
     if (saved) {
@@ -26,7 +33,7 @@ export default function RecordPage() {
     if (analyses) {
       setSelectedAnalyses(JSON.parse(analyses));
     }
-  }, []);
+  }, [router]);
 
   async function startRecording() {
     setTimer(0);
@@ -40,7 +47,7 @@ export default function RecordPage() {
     }
 
     // Speech Recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognitionRef.current = recognition;
@@ -48,7 +55,7 @@ export default function RecordPage() {
       recognition.interimResults = true;
       recognition.lang = 'en-US';
 
-      recognition.onresult = (event) => {
+      recognition.onresult = (event: any) => {
         let interimTranscript = '';
         let finalTranscript = '';
         for (let i = 0; i < event.results.length; i++) {

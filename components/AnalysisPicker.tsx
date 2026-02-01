@@ -75,7 +75,7 @@ export default function AnalysisPicker({
           <p className="text-slate-300 mb-6">
             <span className="font-semibold text-slate-100">{scenarioTitle}</span>
             {" "}
-            - Choose which analyses to run on your recording.
+            - Choose which analyses to run in live analysis.
           </p>
 
           <div className="grid gap-4 mb-8">

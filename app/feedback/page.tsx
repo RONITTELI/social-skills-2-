@@ -3,14 +3,23 @@
 import { useState, useEffect } from "react";
 import { generateAiFeedback } from "@/lib/actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ComprehensiveFeedbackPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [aiFeedback, setAiFeedback] = useState<any>(null);
   const [missingData, setMissingData] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check authorization
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
     const fetchFeedback = async () => {
       const speech = JSON.parse(localStorage.getItem("latestSpeechData") || "null");
       const emotion = JSON.parse(localStorage.getItem("latestEmotionData") || "null");
@@ -49,10 +58,10 @@ export default function ComprehensiveFeedbackPage() {
     };
 
     fetchFeedback();
-  }, []);
+  }, [router]);
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-linear-to-b from-indigo-50 to-white">
+    <div className="min-h-screen py-12 px-6 bg-gradient-to-b from-indigo-50 to-white">
       <div className="max-w-5xl mx-auto">
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-4">

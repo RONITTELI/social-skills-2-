@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-
-import dynamic from "next/dynamic";
-const PostureEmotionDemo = dynamic(() => import("../../components/PostureEmotionDemo"), { ssr: false });
+import ExpandableText from "./ExpandableText";
 
 
 export default function DashboardPage() {
@@ -13,7 +11,12 @@ export default function DashboardPage() {
 
 
   useEffect(() => {
-    const userId = "69760c17f8229f9744b8039e";
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      window.location.href = "/login";
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const res = await fetch(`/api/analysis?userId=${userId}`);
@@ -66,9 +69,6 @@ export default function DashboardPage() {
           >
             Get Comprehensive Feedback
           </Link>
-        </div>
-        <div className="mb-10">
-          <PostureEmotionDemo />
         </div>
 
         {/* Latest Metrics Summary Cards */}

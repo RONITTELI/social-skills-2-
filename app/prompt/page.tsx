@@ -1,19 +1,36 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function PromptPage() {
+function PromptContent() {
   const params = useSearchParams();
   const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const title = params.get("title");
   const prompt = params.get("prompt");
 
   useEffect(() => {
+    // Check authorization
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+    setIsAuthorized(true);
+
     if (title && prompt) {
       localStorage.setItem("scenario", JSON.stringify({ title, prompt }));
     }
-  }, [title, prompt]);
+  }, [title, prompt, router]);
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-slate-300">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-16 px-6">
@@ -65,10 +82,18 @@ export default function PromptPage() {
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            Start Recording
+            Start Live Analysis
           </span>
         </button>
       </div>
     </div>
+  );
+}
+
+export default function PromptPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p className="text-slate-300">Loading...</p></div>}>
+      <PromptContent />
+    </Suspense>
   );
 }

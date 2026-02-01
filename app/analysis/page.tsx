@@ -20,6 +20,13 @@ export default function AnalysisPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check authorization first
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
     const processAnalysis = async () => {
       const transcript = localStorage.getItem("transcript");
       const durationStr = localStorage.getItem("duration");
