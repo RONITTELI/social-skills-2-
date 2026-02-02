@@ -153,7 +153,9 @@ export default function PostureEmotionDemo() {
       return {
         feedback,
         overallScore: Math.round(score),
-        issues
+        issues,
+        postureScore: Math.round(score),
+        postureIssues: issues
       };
     }
 
@@ -288,10 +290,26 @@ export default function PostureEmotionDemo() {
 
       score = Math.max(0, Math.min(100, score));
 
+      // Determine dominant emotion based on feedback
+      let dominantEmotion = 'neutral';
+      if (feedback.some(f => f.includes('Great smile') || f.includes('Genuine smile'))) {
+        dominantEmotion = 'happy';
+      } else if (feedback.some(f => f.includes('weak_smile') || f.includes('no_smile'))) {
+        dominantEmotion = 'serious';
+      }
+
+      // Determine eye contact quality
+      let eyeContact = 'good';
+      if (issues.includes('poor_eye_contact') || issues.includes('eyes_down') || issues.includes('eyes_up')) {
+        eyeContact = 'poor';
+      }
+
       return {
         feedback,
         overallScore: Math.round(score),
-        issues
+        issues,
+        dominantEmotion,
+        eyeContact
       };
     }
 

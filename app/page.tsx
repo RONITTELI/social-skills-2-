@@ -265,20 +265,7 @@ export default function HomePage() {
                 </div>
               </Link>
 
-              {/* Feature 2 */}
-              <Link href="/analysis" className="group">
-                <div className="h-full p-8 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur border border-purple-400/30 rounded-2xl hover:from-purple-500/40 hover:to-pink-500/40 hover:border-purple-300/50 transition-all duration-300 cursor-pointer">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/30">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent mb-3">Speech Analysis</h3>
-                  <p className="text-pink-200/80 leading-relaxed">
-                    Analyze WPM, filler words, clarity, and speech patterns with detailed metrics and insights.
-                  </p>
-                </div>
-              </Link>
+            
 
               {/* Feature 3 */}
               <Link href="/emotion" className="group">
@@ -310,20 +297,7 @@ export default function HomePage() {
                 </div>
               </Link>
 
-              {/* Feature 5 */}
-              <Link href="/feedback" className="group">
-                <div className="h-full p-8 bg-gradient-to-br from-red-500/20 to-pink-500/20 backdrop-blur border border-red-400/30 rounded-2xl hover:from-red-500/40 hover:to-pink-500/40 hover:border-red-300/50 transition-all duration-300 cursor-pointer">
-                  <div className="w-14 h-14 bg-gradient-to-br from-red-400 to-pink-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-red-500/30">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-red-200 to-pink-200 bg-clip-text text-transparent mb-3">AI Feedback</h3>
-                  <p className="text-red-200/80 leading-relaxed">
-                    Get personalized, actionable recommendations powered by advanced AI algorithms.
-                  </p>
-                </div>
-              </Link>
+            
 
               {/* Feature 6 */}
               <Link href="/dashboard" className="group">

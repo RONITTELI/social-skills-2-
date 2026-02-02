@@ -22,12 +22,16 @@ export default function ScenariosPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const speechRecognitionRef = useRef<any>(null);
   const speechStartTimeRef = useRef<number | null>(null);
+  const latestTranscriptRef = useRef<string>("");
+  const latestMetricsRef = useRef<any>(null);
   const [selectedScenario, setSelectedScenario] = useState<typeof scenarios[0] | null>(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [showLiveAnalysis, setShowLiveAnalysis] = useState(false);
   const [selectedAnalyses, setSelectedAnalyses] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [feedback, setFeedback] = useState<any>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string>("");
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -94,6 +98,10 @@ export default function ScenariosPage() {
       const durationSec = Math.max(1, (Date.now() - (speechStartTimeRef.current || Date.now())) / 1000);
       const metrics = analyzeSpeech(transcript, durationSec);
 
+      // Store the latest metrics and transcript for saving later
+      latestTranscriptRef.current = transcript;
+      latestMetricsRef.current = metrics;
+
       const feedback: string[] = [];
       const issues: string[] = [];
       let score = 100;
@@ -125,7 +133,17 @@ export default function ScenariosPage() {
       }
 
       score = Math.max(0, Math.min(100, Math.round(score)));
-      window.dispatchEvent(new CustomEvent("speechFeedback", { detail: { feedback, overallScore: score, issues } }));
+      window.dispatchEvent(new CustomEvent("speechFeedback", { 
+        detail: { 
+          feedback, 
+          overallScore: score, 
+          issues,
+          wpm: metrics.wpm,
+          fillerWords: metrics.fillerWords,
+          transcript: transcript,
+          tone: score >= 80 ? "confident" : score >= 60 ? "moderate" : "needs improvement"
+        } 
+      }));
     };
 
     recognition.onerror = () => {
@@ -173,6 +191,83 @@ export default function ScenariosPage() {
 
   const stopLiveAnalysis = () => {
     setIsRecording(false);
+  };
+
+  const saveToDatabase = async () => {
+    if (!feedback || !selectedScenario) {
+      setSaveMessage("No data to save");
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveMessage("");
+    const userId = localStorage.getItem("userId");
+
+    try {
+      const savePromises = [];
+
+      // Save speech analysis if available
+      if (feedback.speech && selectedAnalyses.includes("speech")) {
+        savePromises.push(
+          fetch("/api/analysis", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              type: "speech",
+              data: feedback.speech,
+              scenarioId: selectedScenario.id,
+              scenarioTitle: selectedScenario.title,
+            }),
+          })
+        );
+      }
+
+      // Save emotion analysis if available
+      if (feedback.emotion && selectedAnalyses.includes("emotion")) {
+        savePromises.push(
+          fetch("/api/analysis", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              type: "emotion",
+              data: feedback.emotion,
+              scenarioId: selectedScenario.id,
+              scenarioTitle: selectedScenario.title,
+            }),
+          })
+        );
+      }
+
+      // Save posture analysis if available
+      if (feedback.posture && selectedAnalyses.includes("posture")) {
+        savePromises.push(
+          fetch("/api/analysis", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              type: "posture",
+              data: feedback.posture,
+              scenarioId: selectedScenario.id,
+              scenarioTitle: selectedScenario.title,
+            }),
+          })
+        );
+      }
+
+      await Promise.all(savePromises);
+      setSaveMessage("✅ Successfully saved to dashboard!");
+      
+      // Clear message after 3 seconds
+      setTimeout(() => setSaveMessage(""), 3000);
+    } catch (error) {
+      console.error("Error saving analysis:", error);
+      setSaveMessage("❌ Error saving data");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!isAuthorized) {
@@ -315,6 +410,32 @@ export default function ScenariosPage() {
                   >
                     <span>◼</span> Stop Live Analysis
                   </button>
+                )}
+
+                {/* Save to Dashboard Button */}
+                {feedback && !isRecording && (
+                  <div className="space-y-2">
+                    <button
+                      onClick={saveToDatabase}
+                      disabled={isSaving}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-xl transition-all font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSaving ? (
+                        <>
+                          <span className="animate-spin">⏳</span> Saving...
+                        </>
+                      ) : (
+                        <>
+                          <span>💾</span> Save to Dashboard
+                        </>
+                      )}
+                    </button>
+                    {saveMessage && (
+                      <p className={`text-center text-sm font-semibold ${saveMessage.includes("✅") ? "text-green-400" : "text-red-400"}`}>
+                        {saveMessage}
+                      </p>
+                    )}
+                  </div>
                 )}
 
                 {(feedback || selectedAnalyses.includes("speech")) && (
