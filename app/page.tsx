@@ -249,7 +249,7 @@ export default function HomePage() {
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Feature 1 */}
               <Link href="/scenarios" className="group">
                 <div className="h-full p-8 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur border border-blue-400/30 rounded-2xl hover:from-blue-500/40 hover:to-cyan-500/40 hover:border-blue-300/50 transition-all duration-300 cursor-pointer">

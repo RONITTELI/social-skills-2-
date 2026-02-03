@@ -35,9 +35,6 @@ export default function Navbar() {
           <Link href="/dashboard" className="px-3 py-2 rounded-lg text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 transition font-medium text-sm sm:text-base">
             Dashboard
           </Link>
-          <Link href="/analysis" className="px-3 py-2 rounded-lg text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 transition font-medium text-sm sm:text-base">
-            Analysis
-          </Link>
           {!loggedIn && (
             <>
               <Link

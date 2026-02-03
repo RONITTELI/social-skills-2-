@@ -9,7 +9,7 @@ export async function POST(request) {
   try {
     const { transcript, wpm, fillerWords, duration } = await request.json();
 
-    const message = await groq.messages.create({
+    const completion = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
       max_tokens: 1024,
       messages: [
@@ -33,8 +33,14 @@ Return ONLY valid JSON.`
       ]
     });
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : '{}';
-    const analysis = JSON.parse(text);
+    const content = completion?.choices?.[0]?.message?.content ?? "{}";
+    let analysis;
+    try {
+      analysis = JSON.parse(content);
+    } catch (parseError) {
+      const match = content.match(/\{[\s\S]*\}/);
+      analysis = match ? JSON.parse(match[0]) : { error: "Invalid AI response" };
+    }
     
     return NextResponse.json(analysis);
   } catch (error) {
